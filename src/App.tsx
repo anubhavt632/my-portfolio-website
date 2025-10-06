@@ -8,6 +8,7 @@ import GraphicDesign from "./pages/GraphicDesign";
 import VideoEditing from "./pages/VideoEditing";
 import WebDevelopment from "./pages/WebDevelopment";
 import Dashboard from "./pages/Dashboard";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/video-editing" element={<VideoEditing />} />
           <Route path="/web-development" element={<WebDevelopment />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

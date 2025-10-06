@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
+import ContactForm from "@/components/ContactForm";
+import Testimonials from "@/components/Testimonials";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const Home = () => {
   const featuredProjects = [
@@ -93,6 +97,41 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Hire Me Section */}
+      <section className="py-20 px-4 bg-primary text-primary-foreground">
+        <div className="container mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-6">Ready to Bring Your Ideas to Life?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+            Whether you need stunning graphics, engaging videos, or powerful web applications, 
+            I'm here to help turn your vision into reality.
+          </p>
+          <a href="#contact">
+            <Button size="lg" variant="secondary" className="group">
+              Let's Work Together
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </a>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* Contact Form */}
+      <section id="contact" className="py-20 px-4">
+        <div className="container mx-auto max-w-3xl">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
+            <p className="text-xl text-muted-foreground">
+              Have a project in mind? Let's discuss how I can help you achieve your goals.
+            </p>
+          </div>
+          <ContactForm />
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 };

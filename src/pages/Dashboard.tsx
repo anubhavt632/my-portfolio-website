@@ -1,23 +1,37 @@
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Lock } from "lucide-react";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  
+  // TODO: Check authentication status from your MERN backend
+  // const isAuthenticated = checkAuthStatus();
+  // if (!isAuthenticated) navigate("/auth");
+  
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
       
-      <section className="pt-32 pb-20 px-4">
+      <section className="flex-1 pt-32 pb-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-4xl font-bold">Dashboard</h1>
+            <Button variant="outline" onClick={() => navigate("/auth")}>
+              <Lock className="mr-2 h-4 w-4" />
+              Login Required
+            </Button>
+          </div>
           
           <Alert className="mb-8 border-destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              <strong>Backend Required:</strong> This dashboard needs Lovable Cloud enabled to function. 
-              Without a backend, you cannot add, edit, or store projects. Enable Cloud for database, authentication, and file storage.
+              <strong>Authentication Required:</strong> Connect your MERN backend to enable login functionality. 
+              Once authenticated, you'll be able to add, edit, and manage your portfolio projects.
             </AlertDescription>
           </Alert>
 
@@ -69,6 +83,8 @@ const Dashboard = () => {
           </Card>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };

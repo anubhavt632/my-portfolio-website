@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -62,6 +63,8 @@ const GraphicDesign = () => {
           </Tabs>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };

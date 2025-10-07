@@ -36,22 +36,23 @@ const Home = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            Electronics Engineer,
-            <br />
-            <span className="text-muted-foreground">Creative Designer & Developer</span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in bg-gradient-to-r from-foreground via-muted-foreground to-foreground bg-clip-text text-transparent">
+            ANUBHAV KUMAR
           </h1>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-muted-foreground">
+            Electronics Engineer, Creative Designer & Developer
+          </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in">
             Combining technical expertise with creative vision to deliver exceptional graphic design, 
             video content, and web development solutions.
           </p>
           <div className="flex gap-4 justify-center animate-scale-in">
-            <Link to="/graphic-design">
-              <Button size="lg">View My Work</Button>
-            </Link>
-            <Link to="/dashboard">
-              <Button size="lg" variant="outline">Dashboard</Button>
-            </Link>
+            <a href="#contact">
+              <Button size="lg">Contact Me</Button>
+            </a>
+            <a href="/cv.pdf" download>
+              <Button size="lg" variant="outline">Download CV</Button>
+            </a>
           </div>
         </div>
       </section>

@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import GraphicDesign from "./pages/GraphicDesign";
 import VideoEditing from "./pages/VideoEditing";
 import WebDevelopment from "./pages/WebDevelopment";
+import ElectronicsProjects from "./pages/ElectronicsProjects";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/graphic-design" element={<GraphicDesign />} />
           <Route path="/video-editing" element={<VideoEditing />} />
           <Route path="/web-development" element={<WebDevelopment />} />
+          <Route path="/electronics" element={<ElectronicsProjects />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<NotFound />} />

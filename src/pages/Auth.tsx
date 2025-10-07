@@ -6,32 +6,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/hooks/useAuth";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     
-    // TODO: Connect to your MERN backend authentication API
-    // Example: const response = await fetch('/api/auth/login', { 
-    //   method: 'POST', 
-    //   body: JSON.stringify({ email, password }),
-    //   headers: { 'Content-Type': 'application/json' }
-    // })
-    
-    toast({
-      title: "Authentication Required",
-      description: "Please connect your MERN backend to enable login functionality.",
-      variant: "destructive"
-    });
-    
-    // After successful login, navigate to dashboard:
-    // navigate("/dashboard");
+    try {
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -72,13 +66,15 @@ const Auth = () => {
                 />
               </div>
               
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              
               <Button type="submit" className="w-full">
                 Sign In
               </Button>
-              
-              <div className="text-center text-sm text-muted-foreground mt-4">
-                Connect your MERN backend for authentication
-              </div>
             </form>
           </CardContent>
         </Card>

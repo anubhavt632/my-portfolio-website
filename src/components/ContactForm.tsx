@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/lib/api";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -19,15 +20,22 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // TODO: Connect to your MERN backend API
-    // Example: await fetch('/api/contact', { method: 'POST', body: JSON.stringify(formData) })
-    
-    toast({
-      title: "Form Submitted!",
-      description: "I'll get back to you soon. (Connect your backend to save this data)",
-    });
-    
-    setFormData({ name: "", email: "", phone: "", projectType: "", message: "" });
+    try {
+      await api.submitContact(formData);
+      
+      toast({
+        title: "Message sent!",
+        description: "Thank you for your interest. I'll get back to you soon.",
+      });
+      
+      setFormData({ name: "", email: "", phone: "", projectType: "", message: "" });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

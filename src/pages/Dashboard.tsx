@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ProjectForm from "@/components/ProjectForm";
+import ProjectFormEnhanced from "@/components/ProjectFormEnhanced";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from "@/hooks/useProjects";
-import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Search, Filter, Image as ImageIcon, Video } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 const Dashboard = () => {
@@ -24,6 +26,8 @@ const Dashboard = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
 
   useEffect(() => {
     if (!authLoading && (!user || !user.isAdmin)) {
@@ -40,6 +44,15 @@ const Dashboard = () => {
   }
 
   const projects = projectsData?.projects || [];
+  
+  // Filter and search projects
+  const filteredProjects = projects.filter((p: any) => {
+    const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         p.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = filterCategory === 'all' || p.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   const graphicDesignCount = projects.filter((p: any) => p.category === 'Graphic Design').length;
   const videoEditingCount = projects.filter((p: any) => p.category === 'Video Editing').length;
   const webDevCount = projects.filter((p: any) => p.category === 'Web Development').length;
@@ -53,10 +66,7 @@ const Dashboard = () => {
 
   const handleEditProject = (project: any) => {
     setFormMode('edit');
-    setSelectedProject({
-      ...project,
-      tags: project.tags?.join(', ') || '',
-    });
+    setSelectedProject(project);
     setFormOpen(true);
   };
 
@@ -138,29 +148,64 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>All Projects</CardTitle>
-            <CardDescription>Manage your portfolio projects</CardDescription>
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle>All Projects</CardTitle>
+                <CardDescription>Manage your portfolio projects</CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search projects..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-9 w-64"
+                  />
+                </div>
+                <Select value={filterCategory} onValueChange={setFilterCategory}>
+                  <SelectTrigger className="w-48">
+                    <Filter className="mr-2 h-4 w-4" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                    <SelectItem value="Video Editing">Video Editing</SelectItem>
+                    <SelectItem value="Web Development">Web Development</SelectItem>
+                    <SelectItem value="Electronics">Electronics</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {projects.map((project: any) => (
-                <div key={project._id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex-1">
+              {filteredProjects.map((project: any) => (
+                <div key={project._id} className="flex items-start gap-4 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                  {project.imageUrl && (
+                    <div className="flex-shrink-0">
+                      <img src={project.imageUrl} alt={project.title} className="w-24 h-24 object-cover rounded" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold">{project.title}</h3>
+                      <h3 className="font-semibold truncate">{project.title}</h3>
                       <Badge variant="secondary">{project.category}</Badge>
                       {project.featured && <Badge>Featured</Badge>}
+                      {project.imageUrl && <ImageIcon className="h-4 w-4 text-muted-foreground" />}
+                      {project.videoUrl && <Video className="h-4 w-4 text-muted-foreground" />}
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
                     {project.tags && project.tags.length > 0 && (
-                      <div className="flex gap-2 mt-2">
+                      <div className="flex gap-2 mt-2 flex-wrap">
                         {project.tags.map((tag: string, idx: number) => (
-                          <Badge key={idx} variant="outline">{tag}</Badge>
+                          <Badge key={idx} variant="outline" className="text-xs">{tag}</Badge>
                         ))}
                       </div>
                     )}
                   </div>
-                  <div className="flex gap-2 ml-4">
+                  <div className="flex gap-2">
                     <Button variant="outline" size="icon" onClick={() => handleEditProject(project)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
@@ -170,6 +215,9 @@ const Dashboard = () => {
                   </div>
                 </div>
               ))}
+              {filteredProjects.length === 0 && projects.length > 0 && (
+                <p className="text-center text-muted-foreground py-8">No projects match your search criteria.</p>
+              )}
               {projects.length === 0 && (
                 <p className="text-center text-muted-foreground py-8">No projects yet. Create your first project!</p>
               )}
@@ -178,7 +226,7 @@ const Dashboard = () => {
         </Card>
       </main>
 
-      <ProjectForm
+      <ProjectFormEnhanced
         open={formOpen}
         onClose={() => setFormOpen(false)}
         onSubmit={handleFormSubmit}

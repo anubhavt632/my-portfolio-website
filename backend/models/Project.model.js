@@ -23,7 +23,13 @@ const projectSchema = new mongoose.Schema({
   imageUrl: {
     type: String
   },
+  imagePath: {
+    type: String
+  },
   videoUrl: {
+    type: String
+  },
+  videoPath: {
     type: String
   },
   projectUrl: {

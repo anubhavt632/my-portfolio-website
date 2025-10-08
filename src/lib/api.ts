@@ -72,6 +72,34 @@ class ApiClient {
     });
   }
 
+  // Upload
+  async uploadFile(file: File, category: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('category', category);
+
+    const response = await fetch(`${API_URL}/upload`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Upload failed');
+    }
+
+    return data;
+  }
+
+  async deleteFile(path: string) {
+    return this.request('/upload', {
+      method: 'DELETE',
+      body: JSON.stringify({ path }),
+    });
+  }
+
   // Contact
   async submitContact(data: { name: string; email: string; phone?: string; projectType: string; message: string }) {
     return this.request('/contact', {

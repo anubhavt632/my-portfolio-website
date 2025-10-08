@@ -19,7 +19,7 @@ This will create an admin account with:
 ```bash
 npm start
 ```
-The backend will run on `http://localhost:5000`
+The backend will run on `http://localhost:5001`
 
 ## Step 4: Start Frontend (in a new terminal)
 ```bash
@@ -38,12 +38,12 @@ The frontend will run on `http://localhost:8080`
 4. You'll be redirected to `/dashboard` where you can manage projects
 
 ## 📝 Important Notes
-- Backend runs on port 5000
+- Backend runs on port 5001
 - Frontend runs on port 8080
 - Change the admin password after first login for security
 - The .env file is already configured with your MongoDB and Firebase credentials
 
 ## 🔧 Troubleshooting
-- If port 5000 is busy, change PORT in `backend/.env`
+- If port 5001 is busy, change PORT in `backend/.env`
 - If port 8080 is busy, Vite will automatically suggest an alternative port
 - Make sure MongoDB connection string is correct in `backend/.env`

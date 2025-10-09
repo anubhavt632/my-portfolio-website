@@ -49,7 +49,7 @@ const Home = () => {
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🎨</div>
                 <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">Graphic Design</h3>
                 <p className="text-muted-foreground">
-                  Logos, social media posts, web banners, and comprehensive brand identity solutions.
+                  Logos, social media posts, web banners, and brand identity solutions.
                 </p>
               </div>
             </Link>

@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface ProjectCardProps {
+  _id?: string;
   title: string;
   description: string;
   category: string;
@@ -9,9 +11,9 @@ interface ProjectCardProps {
   tags?: string[];
 }
 
-const ProjectCard = ({ title, description, category, imageUrl, tags }: ProjectCardProps) => {
-  return (
-    <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 bg-card border-border">
+const ProjectCard = ({ _id, title, description, category, imageUrl, tags }: ProjectCardProps) => {
+  const content = (
+    <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 bg-card border-border cursor-pointer">
       <CardHeader className="p-0">
         <div className="w-full h-48 bg-muted overflow-hidden">
           {imageUrl ? (
@@ -36,6 +38,12 @@ const ProjectCard = ({ title, description, category, imageUrl, tags }: ProjectCa
       )}
     </Card>
   );
+
+  if (_id) {
+    return <Link to={`/project/${_id}`}>{content}</Link>;
+  }
+
+  return content;
 };
 
 export default ProjectCard;

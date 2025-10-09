@@ -15,7 +15,13 @@ const projectSchema = new mongoose.Schema({
     enum: ['Graphic Design', 'Video Editing', 'Web Development', 'Electronics']
   },
   subcategory: {
-    type: String
+    type: String,
+    enum: [
+      'Logos', 'Social Media', 'Banners', 'Illustrations', // Graphic Design
+      'Advertisements', 'Educational', 'Promotional', 'Reels', // Video Editing
+      'Websites', 'Web Apps', 'E-commerce', 'Figma Designs', // Web Development
+      'IoT Projects', 'Circuit Design', 'Automation' // Electronics
+    ]
   },
   tags: [{
     type: String

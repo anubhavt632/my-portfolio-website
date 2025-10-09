@@ -5,29 +5,11 @@ import ProjectCard from "@/components/ProjectCard";
 import ContactForm from "@/components/ContactForm";
 import Testimonials from "@/components/Testimonials";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useProjects } from "@/hooks/useProjects";
 
 const Home = () => {
-  const featuredProjects = [
-    {
-      title: "Brand Identity Design",
-      description: "Complete branding package including logo, business cards, and brand guidelines.",
-      category: "Graphic Design",
-      tags: ["Logo", "Branding", "Print"]
-    },
-    {
-      title: "Product Advertisement",
-      description: "High-impact video advertisement for consumer electronics product launch.",
-      category: "Video Editing",
-      tags: ["Advertisement", "Motion Graphics"]
-    },
-    {
-      title: "E-Commerce Platform",
-      description: "Full-stack MERN application with payment integration and admin dashboard.",
-      category: "Web Development",
-      tags: ["React", "Node.js", "MongoDB"]
-    }
-  ];
+  const { data: projectsData, isLoading } = useProjects({ featured: true });
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,28 +43,43 @@ const Home = () => {
       <section className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">What I Do</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-shadow">
-              <div className="text-4xl mb-4">🎨</div>
-              <h3 className="text-xl font-semibold mb-2">Graphic Design</h3>
-              <p className="text-muted-foreground">
-                Logos, social media posts, web banners, and comprehensive brand identity solutions.
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-shadow">
-              <div className="text-4xl mb-4">🎬</div>
-              <h3 className="text-xl font-semibold mb-2">Video Editing</h3>
-              <p className="text-muted-foreground">
-                Advertisements, educational content, promotional videos, and social media reels.
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-shadow">
-              <div className="text-4xl mb-4">💻</div>
-              <h3 className="text-xl font-semibold mb-2">Web Development</h3>
-              <p className="text-muted-foreground">
-                Full-stack MERN applications, responsive websites, and custom web solutions.
-              </p>
-            </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            <Link to="/graphic-design" className="group">
+              <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🎨</div>
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">Graphic Design</h3>
+                <p className="text-muted-foreground">
+                  Logos, social media posts, web banners, and comprehensive brand identity solutions.
+                </p>
+              </div>
+            </Link>
+            <Link to="/video-editing" className="group">
+              <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🎬</div>
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">Video Editing</h3>
+                <p className="text-muted-foreground">
+                  Advertisements, educational content, promotional videos, and social media reels.
+                </p>
+              </div>
+            </Link>
+            <Link to="/web-development" className="group">
+              <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💻</div>
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">Web Development</h3>
+                <p className="text-muted-foreground">
+                  Full-stack MERN applications, responsive websites, and custom web solutions.
+                </p>
+              </div>
+            </Link>
+            <Link to="/electronics" className="group">
+              <div className="text-center p-6 rounded-lg bg-card border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">⚡</div>
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">Electronics</h3>
+                <p className="text-muted-foreground">
+                  IoT projects, circuit design, and innovative electronics solutions.
+                </p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -91,11 +88,31 @@ const Home = () => {
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Featured Projects</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {featuredProjects.map((project, index) => (
-              <ProjectCard key={index} {...project} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {projectsData?.projects && projectsData.projects.length > 0 ? (
+                projectsData.projects.slice(0, 3).map((project: any) => (
+                  <ProjectCard key={project._id} {...project} />
+                ))
+              ) : (
+                <p className="col-span-3 text-center text-muted-foreground">No featured projects yet.</p>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* About Me Section */}
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-3xl font-bold text-center mb-8">About Me</h2>
+          <p className="text-lg text-muted-foreground leading-relaxed text-center">
+            I'm an Electronics Engineer with a passion for design and development. Over the years, I've combined my technical foundation with creative vision to deliver impactful work across graphic design, video editing, and web development. I enjoy bringing ideas to life that balance functionality with visual appeal.
+          </p>
         </div>
       </section>
 

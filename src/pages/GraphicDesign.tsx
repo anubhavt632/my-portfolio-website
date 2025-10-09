@@ -2,22 +2,25 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProjects } from "@/hooks/useProjects";
+import { Loader2 } from "lucide-react";
 
 const GraphicDesign = () => {
-  const logos = [
-    { title: "Tech Startup Logo", description: "Modern minimalist logo design", tags: ["Logo", "Branding"] },
-    { title: "Restaurant Brand", description: "Elegant food industry branding", tags: ["Logo", "Print"] }
-  ];
+  const { data: projectsData, isLoading } = useProjects({ category: 'Graphic Design' });
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
-  const socialMedia = [
-    { title: "Instagram Post Series", description: "Product launch campaign posts", tags: ["Instagram", "Social Media"] },
-    { title: "Story Templates", description: "Engaging story templates for brand", tags: ["Stories", "Templates"] }
-  ];
-
-  const banners = [
-    { title: "E-commerce Banners", description: "Seasonal sale web banners", tags: ["Web Banner", "Marketing"] },
-    { title: "Event Promotion", description: "Conference promotional materials", tags: ["Banner", "Event"] }
-  ];
+  const projects = projectsData?.projects || [];
+  const logos = projects.filter((p: any) => p.subcategory === 'Logos');
+  const socialMedia = projects.filter((p: any) => p.subcategory === 'Social Media');
+  const banners = projects.filter((p: any) => p.subcategory === 'Banners');
+  const illustrations = projects.filter((p: any) => p.subcategory === 'Illustrations');
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,33 +34,58 @@ const GraphicDesign = () => {
           </p>
 
           <Tabs defaultValue="logos" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-12">
               <TabsTrigger value="logos">Logos</TabsTrigger>
               <TabsTrigger value="social">Social Media</TabsTrigger>
               <TabsTrigger value="banners">Banners</TabsTrigger>
+              <TabsTrigger value="illustrations">Illustrations</TabsTrigger>
             </TabsList>
             
             <TabsContent value="logos" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {logos.map((project, index) => (
-                  <ProjectCard key={index} category="Logo Design" {...project} />
-                ))}
+                {logos.length > 0 ? (
+                  logos.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No logo projects yet.</p>
+                )}
               </div>
             </TabsContent>
             
             <TabsContent value="social" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {socialMedia.map((project, index) => (
-                  <ProjectCard key={index} category="Social Media" {...project} />
-                ))}
+                {socialMedia.length > 0 ? (
+                  socialMedia.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No social media projects yet.</p>
+                )}
               </div>
             </TabsContent>
             
             <TabsContent value="banners" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {banners.map((project, index) => (
-                  <ProjectCard key={index} category="Web Banner" {...project} />
-                ))}
+                {banners.length > 0 ? (
+                  banners.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No banner projects yet.</p>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="illustrations" className="animate-fade-in">
+              <div className="grid md:grid-cols-3 gap-8">
+                {illustrations.length > 0 ? (
+                  illustrations.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No illustration projects yet.</p>
+                )}
               </div>
             </TabsContent>
           </Tabs>

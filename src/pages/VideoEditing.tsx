@@ -2,22 +2,25 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProjects } from "@/hooks/useProjects";
+import { Loader2 } from "lucide-react";
 
 const VideoEditing = () => {
-  const advertisements = [
-    { title: "Product Launch Ad", description: "30-second commercial for tech product", tags: ["Advertisement", "Commercial"] },
-    { title: "Brand Story", description: "Emotional brand storytelling video", tags: ["Advertisement", "Branding"] }
-  ];
+  const { data: projectsData, isLoading } = useProjects({ category: 'Video Editing' });
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
-  const educational = [
-    { title: "Tutorial Series", description: "Educational electronics engineering tutorials", tags: ["Education", "Tutorial"] },
-    { title: "Course Promo", description: "Online course promotional video", tags: ["Education", "Promotion"] }
-  ];
-
-  const social = [
-    { title: "Instagram Reels", description: "Trending format social media content", tags: ["Reels", "Instagram"] },
-    { title: "YouTube Shorts", description: "Quick-form video content", tags: ["Shorts", "YouTube"] }
-  ];
+  const projects = projectsData?.projects || [];
+  const advertisements = projects.filter((p: any) => p.subcategory === 'Advertisements');
+  const educational = projects.filter((p: any) => p.subcategory === 'Educational');
+  const promotional = projects.filter((p: any) => p.subcategory === 'Promotional');
+  const reels = projects.filter((p: any) => p.subcategory === 'Reels');
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,33 +34,58 @@ const VideoEditing = () => {
           </p>
 
           <Tabs defaultValue="ads" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-12">
               <TabsTrigger value="ads">Advertisements</TabsTrigger>
               <TabsTrigger value="education">Educational</TabsTrigger>
-              <TabsTrigger value="social">Social Media</TabsTrigger>
+              <TabsTrigger value="promotional">Promotional</TabsTrigger>
+              <TabsTrigger value="reels">Reels</TabsTrigger>
             </TabsList>
             
             <TabsContent value="ads" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {advertisements.map((project, index) => (
-                  <ProjectCard key={index} category="Advertisement" {...project} />
-                ))}
+                {advertisements.length > 0 ? (
+                  advertisements.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No advertisement projects yet.</p>
+                )}
               </div>
             </TabsContent>
             
             <TabsContent value="education" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {educational.map((project, index) => (
-                  <ProjectCard key={index} category="Educational" {...project} />
-                ))}
+                {educational.length > 0 ? (
+                  educational.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No educational projects yet.</p>
+                )}
               </div>
             </TabsContent>
             
-            <TabsContent value="social" className="animate-fade-in">
+            <TabsContent value="promotional" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {social.map((project, index) => (
-                  <ProjectCard key={index} category="Social Media" {...project} />
-                ))}
+                {promotional.length > 0 ? (
+                  promotional.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No promotional projects yet.</p>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="reels" className="animate-fade-in">
+              <div className="grid md:grid-cols-3 gap-8">
+                {reels.length > 0 ? (
+                  reels.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No reels projects yet.</p>
+                )}
               </div>
             </TabsContent>
           </Tabs>

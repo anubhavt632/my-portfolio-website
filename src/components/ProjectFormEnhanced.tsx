@@ -124,22 +124,54 @@ const ProjectFormEnhanced = ({ open, onClose, onSubmit, initialData, mode }: Pro
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Graphic Design">Graphic Design</SelectItem>
-                      <SelectItem value="Video Editing">Video Editing</SelectItem>
-                      <SelectItem value="Web Development">Web Development</SelectItem>
-                      <SelectItem value="Electronics">Electronics</SelectItem>
+                  <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                  <SelectItem value="Video Editing">Video Editing</SelectItem>
+                  <SelectItem value="Web Development">Web Development</SelectItem>
+                  <SelectItem value="Electronics">Electronics</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
                   <Label htmlFor="subcategory">Subcategory</Label>
-                  <Input
-                    id="subcategory"
-                    value={formData.subcategory}
-                    onChange={(e) => handleChange('subcategory', e.target.value)}
-                    placeholder="e.g., Logo Design, Explainer Videos"
-                  />
+                  <Select value={formData.subcategory} onValueChange={(value) => handleChange('subcategory', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select subcategory" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {formData.category === 'Graphic Design' && (
+                        <>
+                          <SelectItem value="Logos">Logos</SelectItem>
+                          <SelectItem value="Social Media">Social Media</SelectItem>
+                          <SelectItem value="Banners">Banners</SelectItem>
+                          <SelectItem value="Illustrations">Illustrations</SelectItem>
+                        </>
+                      )}
+                      {formData.category === 'Video Editing' && (
+                        <>
+                          <SelectItem value="Advertisements">Advertisements</SelectItem>
+                          <SelectItem value="Educational">Educational</SelectItem>
+                          <SelectItem value="Promotional">Promotional</SelectItem>
+                          <SelectItem value="Reels">Reels</SelectItem>
+                        </>
+                      )}
+                      {formData.category === 'Web Development' && (
+                        <>
+                          <SelectItem value="Websites">Websites</SelectItem>
+                          <SelectItem value="Web Apps">Web Apps</SelectItem>
+                          <SelectItem value="E-commerce">E-commerce</SelectItem>
+                          <SelectItem value="Figma Designs">Figma Designs</SelectItem>
+                        </>
+                      )}
+                      {formData.category === 'Electronics' && (
+                        <>
+                          <SelectItem value="IoT Projects">IoT Projects</SelectItem>
+                          <SelectItem value="Circuit Design">Circuit Design</SelectItem>
+                          <SelectItem value="Automation">Automation</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

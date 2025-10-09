@@ -2,22 +2,25 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProjects } from "@/hooks/useProjects";
+import { Loader2 } from "lucide-react";
 
 const WebDevelopment = () => {
-  const mernProjects = [
-    { title: "E-Commerce Platform", description: "Full-stack shopping platform with payment integration", tags: ["React", "Node.js", "MongoDB", "Express"] },
-    { title: "Blog CMS", description: "Content management system with authentication", tags: ["MERN", "JWT", "Admin Panel"] }
-  ];
+  const { data: projectsData, isLoading } = useProjects({ category: 'Web Development' });
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
-  const staticSites = [
-    { title: "Portfolio Website", description: "Responsive portfolio with modern design", tags: ["HTML", "CSS", "JavaScript"] },
-    { title: "Landing Page", description: "High-converting product landing page", tags: ["HTML", "CSS", "Responsive"] }
-  ];
-
-  const dynamicSites = [
-    { title: "Real-time Dashboard", description: "Analytics dashboard with live data", tags: ["React", "API", "Charts"] },
-    { title: "Booking System", description: "Appointment booking web application", tags: ["React", "Database", "CRUD"] }
-  ];
+  const projects = projectsData?.projects || [];
+  const websites = projects.filter((p: any) => p.subcategory === 'Websites');
+  const webApps = projects.filter((p: any) => p.subcategory === 'Web Apps');
+  const ecommerce = projects.filter((p: any) => p.subcategory === 'E-commerce');
+  const figmaDesigns = projects.filter((p: any) => p.subcategory === 'Figma Designs');
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,34 +33,59 @@ const WebDevelopment = () => {
             Full-stack applications and responsive websites built with modern technologies and best practices.
           </p>
 
-          <Tabs defaultValue="mern" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12">
-              <TabsTrigger value="mern">MERN Stack</TabsTrigger>
-              <TabsTrigger value="static">Static Sites</TabsTrigger>
-              <TabsTrigger value="dynamic">Dynamic Sites</TabsTrigger>
+          <Tabs defaultValue="websites" className="w-full">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-12">
+              <TabsTrigger value="websites">Websites</TabsTrigger>
+              <TabsTrigger value="webapps">Web Apps</TabsTrigger>
+              <TabsTrigger value="ecommerce">E-commerce</TabsTrigger>
+              <TabsTrigger value="figma">Figma Designs</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="mern" className="animate-fade-in">
+            <TabsContent value="websites" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {mernProjects.map((project, index) => (
-                  <ProjectCard key={index} category="MERN Stack" {...project} />
-                ))}
+                {websites.length > 0 ? (
+                  websites.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No website projects yet.</p>
+                )}
               </div>
             </TabsContent>
             
-            <TabsContent value="static" className="animate-fade-in">
+            <TabsContent value="webapps" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {staticSites.map((project, index) => (
-                  <ProjectCard key={index} category="Static Website" {...project} />
-                ))}
+                {webApps.length > 0 ? (
+                  webApps.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No web app projects yet.</p>
+                )}
               </div>
             </TabsContent>
             
-            <TabsContent value="dynamic" className="animate-fade-in">
+            <TabsContent value="ecommerce" className="animate-fade-in">
               <div className="grid md:grid-cols-3 gap-8">
-                {dynamicSites.map((project, index) => (
-                  <ProjectCard key={index} category="Dynamic Website" {...project} />
-                ))}
+                {ecommerce.length > 0 ? (
+                  ecommerce.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No e-commerce projects yet.</p>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="figma" className="animate-fade-in">
+              <div className="grid md:grid-cols-3 gap-8">
+                {figmaDesigns.length > 0 ? (
+                  figmaDesigns.map((project: any) => (
+                    <ProjectCard key={project._id} {...project} />
+                  ))
+                ) : (
+                  <p className="col-span-3 text-center text-muted-foreground py-8">No Figma design projects yet.</p>
+                )}
               </div>
             </TabsContent>
           </Tabs>

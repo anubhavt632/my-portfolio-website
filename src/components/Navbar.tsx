@@ -27,15 +27,7 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <Link 
-              to="/services" 
-              className={`text-foreground hover:text-accent transition-colors relative ${
-                isActive('/services') ? 'after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-primary' : ''
-              }`}
-            >
-              Services
-            </Link>
-            <Link 
+            <Link
               to="/graphic-design" 
               className={`text-foreground hover:text-accent transition-colors relative ${
                 isActive('/graphic-design') ? 'after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-primary' : ''
@@ -92,14 +84,7 @@ const Navbar = () => {
               >
                 Home
               </Link>
-              <Link 
-                to="/services" 
-                className={`text-foreground hover:text-accent transition-colors ${isActive('/services') ? 'text-primary font-semibold' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Services
-              </Link>
-              <Link 
+              <Link
                 to="/graphic-design" 
                 className={`text-foreground hover:text-accent transition-colors ${isActive('/graphic-design') ? 'text-primary font-semibold' : ''}`}
                 onClick={() => setIsMenuOpen(false)}

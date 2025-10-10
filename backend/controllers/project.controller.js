@@ -1,4 +1,6 @@
 import Project from '../models/Project.model.js';
+import { storage } from '../config/firebase.js';
+import { ref, deleteObject } from 'firebase/storage';
 
 // @desc    Get all projects
 // @route   GET /api/projects
@@ -72,11 +74,28 @@ export const updateProject = async (req, res) => {
 // @access  Private/Admin
 export const deleteProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndDelete(req.params.id);
+    const project = await Project.findById(req.params.id);
     
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
+
+    // Delete files from Firebase Storage
+    try {
+      if (project.imagePath) {
+        const imageRef = ref(storage, project.imagePath);
+        await deleteObject(imageRef);
+      }
+      if (project.videoPath) {
+        const videoRef = ref(storage, project.videoPath);
+        await deleteObject(videoRef);
+      }
+    } catch (storageError) {
+      console.error('Error deleting files from storage:', storageError);
+      // Continue with project deletion even if file deletion fails
+    }
+
+    await Project.findByIdAndDelete(req.params.id);
     
     res.json({ message: 'Project deleted successfully' });
   } catch (error) {

@@ -14,10 +14,11 @@ const upload = multer({
   },
   fileFilter: (req, file, cb) => {
     // Allow images and videos
-    const allowedTypes = /jpeg|jpg|png|gif|webp|mp4|mov|avi|mkv/;
-    const mimetype = allowedTypes.test(file.mimetype);
+    const imageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const videoTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska'];
+    const allowedTypes = [...imageTypes, ...videoTypes];
     
-    if (mimetype) {
+    if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(new Error('Only image and video files are allowed'));

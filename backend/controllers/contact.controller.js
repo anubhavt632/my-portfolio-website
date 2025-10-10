@@ -1,4 +1,5 @@
 import Contact from '../models/Contact.model.js';
+import nodemailer from 'nodemailer';
 
 // @desc    Create contact inquiry
 // @route   POST /api/contact
@@ -7,14 +8,38 @@ export const createContact = async (req, res) => {
   try {
     const contact = await Contact.create(req.body);
     
-    // TODO: Send email notification to admin
-    // You can integrate nodemailer or similar service here
+    // Send email notification
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Send to your own email
+      subject: `New Contact Form Submission - ${req.body.projectType}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${req.body.name}</p>
+        <p><strong>Email:</strong> ${req.body.email}</p>
+        <p><strong>Phone:</strong> ${req.body.phone || 'Not provided'}</p>
+        <p><strong>Project Type:</strong> ${req.body.projectType}</p>
+        <p><strong>Message:</strong></p>
+        <p>${req.body.message}</p>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
     
     res.status(201).json({ 
       message: 'Thank you for your inquiry! I will get back to you soon.',
       contact 
     });
   } catch (error) {
+    console.error('Contact form error:', error);
     res.status(500).json({ message: error.message });
   }
 };

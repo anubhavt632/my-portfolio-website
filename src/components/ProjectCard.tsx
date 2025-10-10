@@ -27,7 +27,7 @@ const ProjectCard = ({ _id, title, description, category, imageUrl, tags }: Proj
       </CardHeader>
       <CardContent className="pt-4">
         <CardTitle className="text-xl mb-2">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="line-clamp-3">{description}</CardDescription>
       </CardContent>
       {tags && tags.length > 0 && (
         <CardFooter className="gap-2 flex-wrap">
